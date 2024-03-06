@@ -9,6 +9,8 @@
 #include "AcceptSocket.hpp"
 #include "SendSocket.hpp"
 #include "SendToSocket.hpp"
+#include "ReceiveSocket.hpp"
+#include "ReceiveFromSocket.hpp"
 
 typedef Network::ListenSocket<Network::BindSocket<Network::Stream::StreamSocket<Network::Unix::UnixDomain>>> MySocket;
 typedef Network::AcceptSocket<MySocket, Network::Stream::StreamSocket<Network::Unix::UnixDomain>> MyAcceptSocket;

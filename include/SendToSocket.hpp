@@ -26,7 +26,6 @@ namespace Network::Datagram
 
         virtual ~SendToSocket() = default;
 
-        // set the type of the address to be passed to bind
         typedef decltype(std::declval<DST>().get_domain_address()) Address;
 
         int send_to(const void *buf, size_t len, const Address &dest_addr, int flags)

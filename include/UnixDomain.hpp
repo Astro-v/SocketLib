@@ -37,12 +37,22 @@ namespace Network::Unix
                 size = sizeof(address);
             }
 
-            struct sockaddr *get_address() const
+            const struct sockaddr *get_address() const
             {
                 return (struct sockaddr *)&address;
             }
 
-            socklen_t get_size() const
+            struct sockaddr *get_address()
+            {
+                return (struct sockaddr *)&address;
+            }
+
+            const socklen_t &get_size() const
+            {
+                return size;
+            }
+
+            socklen_t &get_size()
             {
                 return size;
             }
