@@ -28,13 +28,14 @@ namespace Network
 
         typedef decltype(std::declval<AcceptedSocket>().get_domain_address()) Address;
 
-        AcceptedSocket *accept(Address *address)
+        AcceptedSocket accept(Address *address)
         {
             struct sockaddr *sa;
             socklen_t *sl;
             int client_fd = ::accept(ST::m_fd, sa, sl);
+            std::cout << client_fd << std::endl;
             address = new Address(sa, sl);
-            return new AcceptedSocket(client_fd);
+            return AcceptedSocket(client_fd);
         }
     };
 
