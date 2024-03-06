@@ -23,11 +23,26 @@ int main()
     Address address("/tmp/test");
 
     std::cout << "Connecting" << std::endl;
-    s->connect(address);
+    if (s->connect(address) < 0)
+    {
+        std::cerr << "Error connecting" << std::endl;
+        return 1;
+    }
     std::string message = "Hello, world!";
 
     std::cout << "Sending " << message << std::endl;
-    s->send(message, 0);
+    if (s->send(message, 0) < 0)
+    {
+        std::cerr << "Error sending" << std::endl;
+        return 1;
+    }
+
+    if (s->receive(message, 100, 0) < 0)
+    {
+        std::cerr << "Error receiving" << std::endl;
+        return 1;
+    }
+    std::cout << "Received : " << message << std::endl;
     std::cout << "End Client" << std::endl;
     return 0;
 }

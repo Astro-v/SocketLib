@@ -41,6 +41,11 @@ int main()
     std::cout << "Waiting for message" << std::endl;
     client.receive(message, 100, 0);
 
+    std::string response = "Hello, client!";
+
+    std::cout << "Sending " << response << std::endl;
+    client.send(response, 0);
+
     std::cout << "Received : " << message << std::endl;
     std::cout << "End Server" << std::endl;
     return 0;

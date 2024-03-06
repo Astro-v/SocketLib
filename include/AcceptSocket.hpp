@@ -28,13 +28,7 @@ namespace Network
 
         AcceptedSocket accept(Address &address)
         {
-            struct sockaddr *sa;
-            socklen_t *sl;
-            int test = ::accept(ST::m_fd.value, sa, sl);
-            FileDescriptor client_fd{test};
-            std::cout << test << std::endl;
-            Address client_address(sa);
-            address = client_address;
+            FileDescriptor client_fd{::accept(ST::m_fd.value, address.get_address(), &address.get_size())};
             return AcceptedSocket(client_fd);
         }
     };
