@@ -3,28 +3,37 @@
 
 #include "Socket.hpp"
 
-template <SocketType ST>
-class BindSocket : public ST
+namespace Network
 {
-public:
-    BindSocket() : ST()
+    template <SocketType ST>
+    class BindSocket : public ST
     {
-    }
+    public:
+        BindSocket() : ST()
+        {
+        }
 
-    template <typename... Args>
-    BindSocket(Args... args) : ST(std::forward<Args>(args)...)
-    {
-    }
+        template <typename... Args>
+        BindSocket(Args... args) : ST(std::forward<Args>(args)...)
+        {
+        }
 
-    virtual ~BindSocket() = default;
+        /**
+         * @brief Move constructor
+         * @param other The other bind socket
+         */
+        BindSocket(BindSocket &&other) noexcept : ST(std::move(other)) {}
 
-    // set the type of the address to be passed to bind
-    typedef decltype(std::declval<ST>().get_domain_address()) Address;
+        virtual ~BindSocket() = default;
 
-    int bind(const Address &address)
-    {
-        return ::bind(ST::m_fd, address.get_address(), address.get_size());
-    }
-};
+        // set the type of the address to be passed to bind
+        typedef decltype(std::declval<ST>().get_domain_address()) Address;
+
+        int bind(const Address &address)
+        {
+            return ::bind(ST::m_fd, address.get_address(), address.get_size());
+        }
+    };
+} // namespace Network
 
 #endif // BIND_SOCKET_HPP

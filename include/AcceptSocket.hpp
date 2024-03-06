@@ -3,33 +3,40 @@
 
 #include "Socket.hpp"
 
-template <typename Domain, typename ST>
-    requires SocketType<ST, Domain>
-class AcceptSocket : public ST
+namespace Network
 {
-public:
-    AcceptSocket() : ST()
+    template <SocketType ST, SocketType AcceptedSocket>
+    class AcceptSocket : public ST
     {
-    }
+    public:
+        AcceptSocket() : ST()
+        {
+        }
 
-    template <typename... Args>
-    AcceptSocket(Args... args) : ST(std::forward<Args>(args...))
-    {
-    }
+        template <typename... Args>
+        AcceptSocket(Args... args) : ST(std::forward<Args>(args)...)
+        {
+        }
 
-    virtual ~AcceptSocket() = default;
+        /**
+         * @brief Move constructor
+         * @param other The other accept socket
+         */
+        AcceptSocket(AcceptSocket &&other) noexcept : ST(std::move(other)) {}
 
-    template <typename U, typename T>
-        requires SocketType<T, U>
-    void accept(T &socket, Address<Domain> &address)
-    {
-        struct sockaddr *sa;
-        socklen_t *address_len;
-        socket.m_fd = ::accept(ST::m_fd, sa, address_len);
-        address.m_address = *reinterpret_cast < decltype
+        virtual ~AcceptSocket() = default;
 
-                            return ::accept(ST::m_fd, address, address_len);
-    }
-};
+        typedef decltype(std::declval<AcceptedSocket>().get_domain_address()) Address;
 
+        AcceptedSocket *accept(Address *address)
+        {
+            struct sockaddr *sa;
+            socklen_t *sl;
+            int client_fd = ::accept(ST::m_fd, sa, sl);
+            address = new Address(sa, sl);
+            return new AcceptedSocket(client_fd);
+        }
+    };
+
+} // namespace Network
 #endif // ACCEPT_SOCKET_HPP

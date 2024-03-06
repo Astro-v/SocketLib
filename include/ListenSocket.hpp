@@ -2,27 +2,33 @@
 #define LISTEN_SOCKET_HPP
 
 #include "Socket.hpp"
-
-template <typename Domain, typename ST>
-    requires SocketType<ST, Domain>
-class ListenSocket : public ST
+namespace Network
 {
-public:
-    ListenSocket() : ST()
+    template <SocketType ST>
+    class ListenSocket : public ST
     {
-    }
+    public:
+        ListenSocket() : ST()
+        {
+        }
 
-    template <typename... Args>
-    ListenSocket(Args... args) : ST(std::forward<Args>(args...))
-    {
-    }
+        template <typename... Args>
+        ListenSocket(Args... args) : ST(std::forward<Args>(args)...)
+        {
+        }
 
-    virtual ~ListenSocket() = default;
+        /**
+         * @brief Move constructor
+         * @param other The other listen socket
+         */
+        ListenSocket(ListenSocket &&other) noexcept : ST(std::move(other)) {}
 
-    int listen(int backlog)
-    {
-        return ::listen(ST::m_fd, backlog);
-    }
-};
+        virtual ~ListenSocket() = default;
 
+        int listen(int backlog = 5)
+        {
+            return ::listen(ST::m_fd, backlog);
+        }
+    };
+} // namespace Network
 #endif // LISTEN_SOCKET_HPP
