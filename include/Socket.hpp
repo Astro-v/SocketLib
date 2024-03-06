@@ -61,7 +61,17 @@ namespace Network
         {
             ::close(m_fd);
         };
+
+        bool operator==(const Socket &other) const
+        {
+            return m_fd == other.m_fd;
+        }
+
+        static const Socket INVALID_SOCKET;
     };
+
+    const Socket Socket::INVALID_SOCKET{-1};
+
 } // namespace Network
 
 template <typename T>

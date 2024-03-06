@@ -22,6 +22,8 @@ int main()
     std::cout
         << "B" << std::endl;
     auto client = s->accept(client_address);
+    if (client == Network::Socket::INVALID_SOCKET)
+        std::cout << "ERROR" << std::endl;
     std::cout << "Hello, World!" << std::endl;
     return 0;
 }
