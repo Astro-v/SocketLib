@@ -30,7 +30,7 @@ namespace Network::Unix
                 size = sizeof(address);
             }
 
-            Address(struct sockaddr *addr, socklen_t *len)
+            Address(struct sockaddr *addr)
             {
                 address.sun_family = domain;
                 strncpy(address.sun_path, ((struct sockaddr_un *)addr)->sun_path, sizeof(address.sun_path));

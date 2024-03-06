@@ -11,6 +11,8 @@ namespace Network
     public:
         BindSocket() : ST()
         {
+
+            std::cout << "ListenSocket" << std::endl;
         }
 
         template <typename... Args>
@@ -31,7 +33,7 @@ namespace Network
 
         int bind(const Address &address)
         {
-            return ::bind(ST::m_fd, address.get_address(), address.get_size());
+            return ::bind(ST::m_fd.value, address.get_address(), address.get_size());
         }
     };
 } // namespace Network

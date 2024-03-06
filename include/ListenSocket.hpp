@@ -10,6 +10,8 @@ namespace Network
     public:
         ListenSocket() : ST()
         {
+
+            std::cout << "ListenSocket" << std::endl;
         }
 
         template <typename... Args>
@@ -27,8 +29,9 @@ namespace Network
 
         int listen(int backlog = 5)
         {
-            return ::listen(ST::m_fd, backlog);
+            return ::listen(ST::m_fd.value, backlog);
         }
     };
 } // namespace Network
+
 #endif // LISTEN_SOCKET_HPP

@@ -2,6 +2,7 @@
 #define INET_DOMAIN_HPP
 
 #include <netinet/in.h>
+#include <arpa/inet.h>
 #include "AddressDomain.hpp"
 
 namespace Network::Inet
@@ -22,6 +23,22 @@ namespace Network::Inet
 
             Address() = default;
 
+            Address(const char *ip, int port)
+            {
+                address.sin_family = domain;
+                address.sin_port = ::htons(port);
+                ::inet_pton(domain, ip, &address.sin_addr);
+                size = sizeof(address);
+            }
+
+            Address(struct sockaddr *addr)
+            {
+                address.sin_family = domain;
+                address.sin_port = ((struct sockaddr_in *)addr)->sin_port;
+                address.sin_addr = ((struct sockaddr_in *)addr)->sin_addr;
+                size = sizeof(address);
+            }
+
             struct sockaddr *get_address() const
             {
                 return (struct sockaddr *)&address;
@@ -30,12 +47,6 @@ namespace Network::Inet
             socklen_t get_size() const
             {
                 return size;
-            }
-
-            void set_address(const struct sockaddr *addr, socklen_t len)
-            {
-                memcpy(&address, addr, len);
-                size = len;
             }
         };
     };

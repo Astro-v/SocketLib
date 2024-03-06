@@ -11,6 +11,7 @@ namespace Network
     public:
         AcceptSocket() : ST()
         {
+            std::cout << "AcceptSocket" << std::endl;
         }
 
         template <typename... Args>
@@ -28,13 +29,14 @@ namespace Network
 
         typedef decltype(std::declval<AcceptedSocket>().get_domain_address()) Address;
 
-        AcceptedSocket accept(Address *address)
+        AcceptedSocket accept(Address &address)
         {
             struct sockaddr *sa;
             socklen_t *sl;
-            int client_fd = ::accept(ST::m_fd, sa, sl);
-            std::cout << client_fd << std::endl;
-            address = new Address(sa, sl);
+            FileDescriptor client_fd{::accept(ST::m_fd.value, sa, sl)};
+            std::cout << client_fd.value << std::endl;
+            Address client_address(sa);
+            address = client_address;
             return AcceptedSocket(client_fd);
         }
     };

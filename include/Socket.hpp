@@ -8,6 +8,12 @@
 
 namespace Network
 {
+
+    struct FileDescriptor
+    {
+        int value;
+    };
+
     /**
      * @brief A socket
      */
@@ -16,7 +22,7 @@ namespace Network
 
     protected:
         // The file descriptor of the socket
-        int m_fd;
+        FileDescriptor m_fd;
 
         Socket() = default;
 
@@ -29,8 +35,9 @@ namespace Network
          */
         Socket(int domain, int type, int protocol = 0)
         {
-            m_fd = ::socket(domain, type, protocol);
-            if (m_fd == -1)
+            std::cout << "HERE" << std::endl;
+            m_fd.value = ::socket(domain, type, protocol);
+            if (m_fd.value == -1)
             {
                 throw std::runtime_error("Failed to create socket");
             }
@@ -40,7 +47,7 @@ namespace Network
          * @brief Construct a new Socket object
          * @param fd The file descriptor of the socket
          */
-        Socket(int fd) : m_fd(fd) {}
+        Socket(FileDescriptor fd) : m_fd{fd.value} {}
 
         /**
          * @brief Move constructor
@@ -49,8 +56,8 @@ namespace Network
          */
         Socket(Socket &&other) noexcept
         {
-            m_fd = other.m_fd;
-            other.m_fd = -1;
+            m_fd.value = other.m_fd.value;
+            other.m_fd.value = -1;
         }
 
         Socket(const Socket &other) = delete;
@@ -59,18 +66,18 @@ namespace Network
     public:
         virtual ~Socket()
         {
-            ::close(m_fd);
+            ::close(m_fd.value);
         };
 
         bool operator==(const Socket &other) const
         {
-            return m_fd == other.m_fd;
+            return m_fd.value == other.m_fd.value;
         }
 
         static const Socket INVALID_SOCKET;
     };
 
-    const Socket Socket::INVALID_SOCKET{-1};
+    const Socket Socket::INVALID_SOCKET{FileDescriptor{-1}};
 
 } // namespace Network
 
