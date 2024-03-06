@@ -17,10 +17,7 @@ namespace Network::Stream
         Domain m_domain;
 
     public:
-        StreamSocket() : StreamSocketBase(m_domain.get_domain())
-        {
-            std::cout << "StreamSocket" << std::endl;
-        }
+        StreamSocket() : StreamSocketBase(m_domain.get_domain()) {}
 
         StreamSocket(FileDescriptor fd) : StreamSocketBase(fd) {}
 

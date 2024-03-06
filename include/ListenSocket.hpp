@@ -8,11 +8,7 @@ namespace Network
     class ListenSocket : public ST
     {
     public:
-        ListenSocket() : ST()
-        {
-
-            std::cout << "ListenSocket" << std::endl;
-        }
+        ListenSocket() : ST() {}
 
         template <typename... Args>
         ListenSocket(Args... args) : ST(std::forward<Args>(args)...)

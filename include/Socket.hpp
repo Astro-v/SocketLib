@@ -35,7 +35,6 @@ namespace Network
          */
         Socket(int domain, int type, int protocol = 0)
         {
-            std::cout << "HERE" << std::endl;
             m_fd.value = ::socket(domain, type, protocol);
             if (m_fd.value == -1)
             {

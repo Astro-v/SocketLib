@@ -9,11 +9,7 @@ namespace Network
     class BindSocket : public ST
     {
     public:
-        BindSocket() : ST()
-        {
-
-            std::cout << "ListenSocket" << std::endl;
-        }
+        BindSocket() : ST() {}
 
         template <typename... Args>
         BindSocket(Args... args) : ST(std::forward<Args>(args)...)

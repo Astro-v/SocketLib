@@ -9,10 +9,7 @@ namespace Network
     class AcceptSocket : public ST
     {
     public:
-        AcceptSocket() : ST()
-        {
-            std::cout << "AcceptSocket" << std::endl;
-        }
+        AcceptSocket() : ST() {}
 
         template <typename... Args>
         AcceptSocket(Args... args) : ST(std::forward<Args>(args)...)
@@ -33,8 +30,9 @@ namespace Network
         {
             struct sockaddr *sa;
             socklen_t *sl;
-            FileDescriptor client_fd{::accept(ST::m_fd.value, sa, sl)};
-            std::cout << client_fd.value << std::endl;
+            int test = ::accept(ST::m_fd.value, sa, sl);
+            FileDescriptor client_fd{test};
+            std::cout << test << std::endl;
             Address client_address(sa);
             address = client_address;
             return AcceptedSocket(client_fd);

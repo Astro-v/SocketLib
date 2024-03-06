@@ -9,22 +9,25 @@
 #include "AcceptSocket.hpp"
 #include "SendSocket.hpp"
 #include "SendToSocket.hpp"
+#include "ReceiveSocket.hpp"
+#include "ReceiveFromSocket.hpp"
+#include "ConnectSocket.hpp"
 
-typedef Network::ListenSocket<Network::BindSocket<Network::Stream::StreamSocket<Network::Unix::UnixDomain>>> MySocket;
-typedef Network::AcceptSocket<MySocket, Network::Stream::StreamSocket<Network::Unix::UnixDomain>> MyAcceptSocket;
 typedef Network::Unix::UnixDomain::Address Address;
-
-typedef Network::Stream::SendSocket<MySocket> MySendSocket;
+typedef Network::ConnectSocket<Network::Stream::SendSocket<Network::Stream::ReceiveSocket<Network::Stream::StreamSocket<Network::Unix::UnixDomain>>>> Client;
 
 int main()
 {
-    MyAcceptSocket *s = new MyAcceptSocket();
+    std::cout << "Initialize Client" << std::endl;
+    Client *s = new Client();
     Address address("/tmp/test");
-    s->bind(address);
-    s->listen();
-    Address client_address;
-    auto client = s->accept(client_address);
-    if (client == Network::Socket::INVALID_SOCKET)
-        std::cout << "ERROR" << std::endl;
+
+    std::cout << "Connecting" << std::endl;
+    s->connect(address);
+    std::string message = "Hello, world!";
+
+    std::cout << "Sending " << message << std::endl;
+    s->send(message, 0);
+    std::cout << "End Client" << std::endl;
     return 0;
 }
