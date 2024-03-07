@@ -9,26 +9,25 @@ namespace Network
     class ConnectSocket : public ST
     {
     public:
-        ConnectSocket() : ST() {}
+        ConnectSocket();
 
         template <typename... Args>
-        ConnectSocket(Args... args) : ST(std::forward<Args>(args)...) {}
+        ConnectSocket(Args... args);
 
         /**
          * @brief Move constructor
          * @param other The other connect socket
          */
-        ConnectSocket(ConnectSocket &&other) noexcept : ST(std::move(other)) {}
+        ConnectSocket(ConnectSocket &&other) noexcept;
 
         virtual ~ConnectSocket() = default;
 
         typedef decltype(std::declval<ST>().get_domain_address()) Address;
 
-        int connect(const Address &addr)
-        {
-            return ::connect(ST::m_fd.value, addr.get_address(), addr.get_size());
-        }
+        int connect(const Address &addr);
     };
 } // namespace Network
+
+#include "ConnectSocket.tpp"
 
 #endif // CONNECT_SOCKET_HPP

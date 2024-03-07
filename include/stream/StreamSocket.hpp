@@ -17,20 +17,33 @@ namespace Network::Stream
         Domain m_domain;
 
     public:
-        StreamSocket() : StreamSocketBase(m_domain.get_domain()) {}
+        /**
+         * @brief Construct a new Stream Socket object
+         */
+        StreamSocket();
 
-        StreamSocket(FileDescriptor fd) : StreamSocketBase(fd) {}
+        /**
+         * @brief Construct a new Stream Socket object
+         * @param fd The file descriptor of the socket
+         */
+        StreamSocket(FileDescriptor fd);
 
         /**
          * @brief Move constructor
          * @param other The other stream socket
          */
-        StreamSocket(StreamSocket &&other) noexcept : StreamSocketBase(std::move(other)), m_domain(other.m_domain) {}
+        StreamSocket(StreamSocket &&other) noexcept;
 
         virtual ~StreamSocket() = default;
 
-        typename Domain::Address get_domain_address() const { return m_domain.Address; }
+        /**
+         * @brief Get the domain address type of the socket
+         * @return Domain::Address The domain address type of the socket
+         */
+        typename Domain::Address get_domain_address() const;
     };
 } // namespace Network
+
+#include "StreamSocket.tpp"
 
 #endif // STREAM_SOCKET_HPP

@@ -12,31 +12,60 @@ namespace Network::Stream
     class ReceiveSocket : public SST
     {
     public:
-        ReceiveSocket() : SST() {}
+        /**
+         * @brief Construct a new Receive Socket object
+         * @note The next class constructor is called as a static decorator
+         */
+        ReceiveSocket();
 
+        /**
+         * @brief Construct a new Receive Socket object
+         * @tparam Args The type of the arguments
+         * @param args The arguments
+         * @note The arguments are forwarded to the next class constructor
+         */
         template <typename... Args>
-        ReceiveSocket(Args... args) : SST(std::forward<Args>(args)...) {}
+        ReceiveSocket(Args... args);
 
         /**
          * @brief Move constructor
          * @param other The other receive socket
          */
-        ReceiveSocket(ReceiveSocket &&other) noexcept : SST(std::move(other)) {}
+        ReceiveSocket(ReceiveSocket &&other) noexcept;
 
         virtual ~ReceiveSocket() = default;
 
-        ssize_t receive(void *buffer, size_t length, int flags)
-        {
-            return ::recv(SST::m_fd.value, buffer, length, flags);
-        }
+        /**
+         * @brief Receive data from a socket
+         * @param buffer The buffer to receive the data
+         * @param length The length of the buffer
+         * @param flags The flags for the receive
+         * The flags are :
+         * - MSG_DONTWAIT : Non-blocking operation
+         * - MSG_OOB : Process out-of-band data
+         * - MSG_PEEK : Peek at incoming data
+         * - MSG_WAITALL : Wait for full request or error
+         * @return ssize_t The number of bytes received
+         */
+        ssize_t receive(void *buffer, size_t length, int flags);
 
-        ssize_t receive(std::string &buffer, size_t length, int flags)
-        {
-            buffer.resize(length);
-            return receive(buffer.data(), length, flags);
-        }
+        /**
+         * @brief Receive data from a socket
+         * @param buffer The buffer to receive the data
+         * @param length The length of the buffer
+         * @param flags The flags for the receive
+         * The flags are :
+         * - MSG_DONTWAIT : Non-blocking operation
+         * - MSG_OOB : Process out-of-band data
+         * - MSG_PEEK : Peek at incoming data
+         * - MSG_WAITALL : Wait for full request or error
+         * @return ssize_t The number of bytes received
+         */
+        ssize_t receive(std::string &buffer, size_t length, int flags);
     };
 
 } // namespace Network::Stream
+
+#include "ReceiveSocket.tpp"
 
 #endif // RECEIVE_SOCKET_HPP

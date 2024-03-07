@@ -8,7 +8,9 @@
 
 namespace Network
 {
-
+    /**
+     * @brief A file descriptor
+     */
     struct FileDescriptor
     {
         int value;
@@ -33,50 +35,55 @@ namespace Network
          * Specifying a protocol of 0 use an unspecified default protocol
          * appropriate for the requested socket type.
          */
-        Socket(int domain, int type, int protocol = 0)
-        {
-            m_fd.value = ::socket(domain, type, protocol);
-            if (m_fd.value == -1)
-            {
-                throw std::runtime_error("Failed to create socket");
-            }
-        }
+        Socket(int domain, int type, int protocol = 0);
 
         /**
          * @brief Construct a new Socket object
          * @param fd The file descriptor of the socket
          */
-        Socket(FileDescriptor fd) : m_fd{fd.value} {}
+        Socket(FileDescriptor fd);
 
         /**
          * @brief Move constructor
          * @param other The other socket
          * @note The other socket is invalidated after the move
          */
-        Socket(Socket &&other) noexcept
-        {
-            m_fd.value = other.m_fd.value;
-            other.m_fd.value = -1;
-        }
+        Socket(Socket &&other) noexcept;
 
+        /**
+         * @brief Copy constructor
+         * @param other The other socket
+         * @note Deleted
+         */
         Socket(const Socket &other) = delete;
+
+        /**
+         * @brief Copy assignment operator
+         * @param other The other socket
+         * @return Socket& The reference to this
+         * @note Deleted
+         */
         Socket &operator=(const Socket &other) = delete;
 
     public:
-        virtual ~Socket()
-        {
-            ::close(m_fd.value);
-        };
+        /**
+         * @brief Destroy the Socket object
+         */
+        virtual ~Socket();
 
-        bool operator==(const Socket &other) const
-        {
-            return m_fd.value == other.m_fd.value;
-        }
+        /**
+         * @brief Equality operator
+         * @param other The other socket
+         * @return true If the sockets are equal
+         * @return false If the sockets are not equal
+         */
+        bool operator==(const Socket &other) const;
 
+        /**
+         * @brief The invalid socket (file descriptor is -1)
+         */
         static const Socket INVALID_SOCKET;
     };
-
-    const Socket Socket::INVALID_SOCKET{FileDescriptor{-1}};
 
 } // namespace Network
 
