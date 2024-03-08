@@ -1,6 +1,7 @@
 #ifndef UNIX_DOMAIN_HPP
 #define UNIX_DOMAIN_HPP
 
+#include <memory>
 #include <sys/socket.h>
 #include <sys/un.h>
 #include "AddressDomain.hpp"
@@ -9,54 +10,72 @@ namespace Network::Unix
 {
     struct UnixDomain : public AddressDomain
     {
+        /**
+         * @brief The domain of the address
+         * AF_UNIX is used for Unix domain sockets
+         * AF_INET is used for IPv4
+         * AF_INET6 is used for IPv6
+         * AF_UNSPEC is used for unspecified
+         * etc.
+         */
         static const int domain = AF_UNIX;
 
-        int get_domain() const override
-        {
-            return domain;
-        }
+        /**
+         * @brief Get the domain of the address e.g. AF_UNIX, AF_INET, etc.
+         */
+        int get_domain() const override;
 
         struct Address
         {
-            struct sockaddr_un address;
-            socklen_t size;
+            /**
+             * @brief The address of the Unix domain socket
+             */
+            std::unique_ptr<struct sockaddr_un> address;
+
+            /**
+             * @brief The size of the address
+             */
+            std::unique_ptr<socklen_t> size;
 
             Address() = default;
 
-            Address(const char *path)
-            {
-                address.sun_family = domain;
-                strncpy(address.sun_path, path, sizeof(address.sun_path));
-                size = sizeof(address);
-            }
+            /**
+             * @brief Construct a new Address object
+             * @param path The path to the Unix domain socket
+             */
+            Address(const char *path);
 
-            Address(struct sockaddr *addr)
-            {
-                address.sun_family = domain;
-                strncpy(address.sun_path, ((struct sockaddr_un *)addr)->sun_path, sizeof(address.sun_path));
-                size = sizeof(address);
-            }
+            /**
+             * @brief Construct a new Address object
+             * @param addr The address to copy
+             */
+            Address(struct sockaddr *addr);
 
-            const struct sockaddr *get_address() const
-            {
-                return (struct sockaddr *)&address;
-            }
+            /**
+             * @brief Get the address object
+             * @return const struct sockaddr* The address object
+             */
+            const struct sockaddr *get_address() const;
 
-            struct sockaddr *get_address()
-            {
-                return (struct sockaddr *)&address;
-            }
+            /**
+             * @brief Get the address object
+             * @return struct sockaddr* The address object
+             */
+            struct sockaddr *get_address();
 
-            const socklen_t &get_size() const
-            {
-                return size;
-            }
+            /**
+             * @brief Get the size object
+             * @return const socklen_t* The size object
+             */
+            const socklen_t *get_size() const;
 
-            socklen_t &get_size()
-            {
-                return size;
-            }
+            /**
+             * @brief Get the size object
+             * @return socklen_t* The size object
+             */
+            socklen_t *get_size();
         };
     };
 } // namespace Network::Unix
+
 #endif // UNIX_DOMAIN_HPP

@@ -13,10 +13,8 @@ template <SocketType ST, SocketType AcceptedSocket>
 Network::AcceptSocket<ST, AcceptedSocket>::AcceptSocket(AcceptSocket &&other) noexcept : ST(std::move(other))
 {
 }
-
 template <SocketType ST, SocketType AcceptedSocket>
 AcceptedSocket Network::AcceptSocket<ST, AcceptedSocket>::accept(Network::AcceptSocket<ST, AcceptedSocket>::Address &address)
 {
-    FileDescriptor client_fd{::accept(ST::m_fd.value, address.get_address(), &address.get_size())};
-    return AcceptedSocket(client_fd);
+    return AcceptedSocket(FileDescriptor{::accept(ST::m_fd.value, address.get_address(), address.get_size())});
 }

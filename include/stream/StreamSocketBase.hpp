@@ -2,7 +2,6 @@
 #define STREAM_SOCKET_BASE_HPP
 
 #include "Socket.hpp"
-#include "AddressDomain.hpp"
 
 namespace Network::Stream
 {
@@ -12,15 +11,15 @@ namespace Network::Stream
     class StreamSocketBase : public Socket
     {
     protected:
-        StreamSocketBase(int domain) : Socket(domain, SOCK_STREAM) {}
-        StreamSocketBase(FileDescriptor fd) : Socket(fd) {}
+        StreamSocketBase(int domain);
+        StreamSocketBase(FileDescriptor fd);
 
     public:
         /**
          * @brief Move constructor
          * @param other The other stream socket
          */
-        StreamSocketBase(StreamSocketBase &&other) noexcept : Socket(std::move(other)) {}
+        StreamSocketBase(StreamSocketBase &&other) noexcept;
 
         virtual ~StreamSocketBase() = default;
     };

@@ -4,7 +4,12 @@ project(SocketLib)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_library(libSocket socket/Socket.cpp)
+add_library(libSocket 
+            socket/Socket.cpp
+            stream/StreamSocketBase.cpp
+            datagram/DatagramSocketBase.cpp
+            unix/UnixDomain.cpp
+            inet/InetDomain.cpp)
 
 target_include_directories(libSocket PUBLIC ${PROJECT_SOURCE_DIR}/include/socket)
 target_include_directories(libSocket PUBLIC ${PROJECT_SOURCE_DIR}/include/stream)

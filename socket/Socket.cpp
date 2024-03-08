@@ -1,4 +1,5 @@
 #include "Socket.hpp"
+#include <iostream>
 
 const Network::Socket Network::Socket::INVALID_SOCKET{FileDescriptor{-1}};
 
@@ -23,6 +24,7 @@ Network::Socket::Socket(Socket &&other) noexcept
 
 Network::Socket::~Socket()
 {
+    std::cout << "closing socket" << std::endl;
     ::close(m_fd.value);
 }
 

@@ -1,6 +1,7 @@
 #ifndef ACCEPT_SOCKET_HPP
 #define ACCEPT_SOCKET_HPP
 
+#include <memory>
 #include "Socket.hpp"
 
 namespace Network

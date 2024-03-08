@@ -1,4 +1,3 @@
-
 template <StreamSocketType SST>
 Network::Stream::SendSocket<SST>::SendSocket() : SST() {}
 

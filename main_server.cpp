@@ -25,9 +25,18 @@ int main()
     Listener *s = new Listener();
     Address address("/tmp/test");
     std::cout << "Binding" << std::endl;
-    s->bind(address);
+    if (s->bind(address) == -1)
+    {
+        perror("Perror bind: ");
+        return 1;
+    }
     std::cout << "Listening" << std::endl;
-    s->listen();
+
+    if (s->listen() == -1)
+    {
+        perror("Perror bind: ");
+        return 1;
+    }
     Address client_address;
 
     std::cout << "Accecepting Client" << std::endl;

@@ -13,15 +13,15 @@ namespace Network::Datagram
     class DatagramSocketBase : public Socket
     {
     protected:
-        DatagramSocketBase(AddressDomain &domain) : Socket(domain.get_domain(), SOCK_DGRAM) {}
-        DatagramSocketBase(FileDescriptor fd) : Socket(fd) {}
+        DatagramSocketBase(int &domain);
+        DatagramSocketBase(FileDescriptor fd);
 
     public:
         /**
          * @brief Move constructor
          * @param other The other datagram socket
          */
-        DatagramSocketBase(DatagramSocketBase &&other) noexcept : Socket(std::move(other)) {}
+        DatagramSocketBase(DatagramSocketBase &&other) noexcept;
 
         virtual ~DatagramSocketBase() = default;
     };

@@ -17,20 +17,22 @@ namespace Network::Datagram
         Domain m_domain;
 
     public:
-        DatagramSocket() : DatagramSocketBase(m_domain, SOCK_DGRAM) {}
-        DatagramSocket(FileDescriptor fd) : DatagramSocketBase(fd) {}
+        DatagramSocket();
+        DatagramSocket(FileDescriptor fd);
 
         /**
          * @brief Move constructor
          * @param other The other datagram socket
          */
-        DatagramSocket(DatagramSocket &&other) noexcept : DatagramSocketBase(std::move(other)), m_domain(other.m_domain) {}
+        DatagramSocket(DatagramSocket &&other) noexcept;
 
         virtual ~DatagramSocket() = default;
 
-        typename Domain::Address get_domain_address() const { return m_domain.Address; }
+        typename Domain::Address get_domain_address() const;
     };
 
 } // namespace Network
+
+#include "DatagramSocket.tpp"
 
 #endif // DATAGRAM_SOCKET_HPP

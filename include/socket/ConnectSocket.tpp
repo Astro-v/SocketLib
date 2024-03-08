@@ -18,5 +18,6 @@ Network::ConnectSocket<ST>::ConnectSocket(ConnectSocket &&other) noexcept : ST(s
 template <SocketType ST>
 int Network::ConnectSocket<ST>::connect(const Address &addr)
 {
-    return ::connect(ST::m_fd.value, addr.get_address(), addr.get_size());
+    std::cout << "Connecting : " << ST::m_fd.value << std::endl;
+    return ::connect(ST::m_fd.value, addr.get_address(), *addr.get_size());
 }

@@ -13,5 +13,5 @@ Network::BindSocket<ST>::BindSocket(BindSocket &&other) noexcept : ST(std::move(
 template <SocketType ST>
 int Network::BindSocket<ST>::bind(const Network::BindSocket<ST>::Address &address)
 {
-    return ::bind(ST::m_fd.value, address.get_address(), address.get_size());
+    return ::bind(ST::m_fd.value, address.get_address(), *address.get_size());
 }

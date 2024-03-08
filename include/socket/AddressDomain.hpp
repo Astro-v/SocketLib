@@ -2,6 +2,7 @@
 #define ADDRESS_DOMAIN_HPP
 
 #include <sys/socket.h>
+#include <type_traits>
 #include <cstring>
 
 namespace Network
